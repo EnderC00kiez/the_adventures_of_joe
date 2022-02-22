@@ -6,6 +6,13 @@ from sys import exit
 import time
 import random
 
+try:
+    import pyi_splash
+    if pyi_splash.is_alive():
+        pyi_splash.update_text("Welcome to... The Adventures of Joe!")
+except ImportError:
+    pass
+
 blacklisted_colors = ["#121212", "#054d05", "#64b5f6"]
 sounds = ["Bridge.mp3"]
 
