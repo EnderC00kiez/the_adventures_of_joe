@@ -239,7 +239,6 @@ while True:
                 pygame.display.update()
             # if the player presses A, move the character left
         elif pressed[pygame.K_a]:
-            Desert(background)
             if find_hex(character_x - 5, character_y, blacklisted_colors):
                 # remove character from previous position
                 background = bgobj
