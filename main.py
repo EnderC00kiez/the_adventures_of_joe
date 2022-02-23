@@ -5,16 +5,54 @@ from pygame.locals import *
 from sys import exit
 import time
 import random
+import savelib
 
 try:
     import pyi_splash
+
     if pyi_splash.is_alive():
         pyi_splash.update_text("Welcome to... The Adventures of Joe!")
 except ImportError:
     pass
 
 blacklisted_colors = ["#121212", "#054d05", "#64b5f6"]
-sounds = ["Bridge.mp3"]
+#sounds = ["Bridge.mp3"]
+sounds = ["snowy_tundra_boss.mp3"]
+bgname = "plains"
+
+
+def plains(background):
+    bgname = "plains"
+    sounds = ["Bridge.mp3"]
+    blacklisted_colors = ["#121212", "#054d05", "#64b5f6"]
+    # remove character
+    screen.blit(background, (0, 0))
+    # clear old background
+    background.fill((0, 0, 0, 0))
+    # set background to desert.png
+    bgobj = pygame.transform.scale(pygame.image.load("assets/plains.png"), (800, 600))
+    background = bgobj
+    character = pygame.image.load("assets/character.png")
+    # load the character's sprite at 0,0
+    character_x = 0
+    character_y = 0
+    # create the character sprite
+    character_sprite = pygame.sprite.Sprite()
+    character_sprite.image = character
+    character_sprite.rect = character_sprite.image.get_rect()
+    character_sprite.rect.x = character_x
+    character_sprite.rect.y = character_y
+    # draw background
+    screen.blit(background, (0, 0))
+    # draw character
+    screen.blit(
+        character_sprite.image, (character_sprite.rect.x, character_sprite.rect.y)
+    )
+    # update screen
+    pygame.display.update()
+    # create a character
+    character = pygame.image.load("assets/character.png")
+    # create a background
 
 
 can_move = True
@@ -78,8 +116,18 @@ def find_hex(x, y, cannot_step_on):
         pass
 
 
+def FrozenTundra(background):
+    bgname = "frozen_tundra"
+    blacklisted_colors = ["#9e9e9e", "#90caf9", "#212121"]
+
+def Swamp(background):
+    bgname = "swamp"
+    sounds = ["Muddy Water.mp3"]
+    background = bgname
+
 
 def Desert(background):
+    bgname = "desert"
     sounds = ["Saguaro.mp3"]
     # remove character
     screen.blit(background, (0, 0))
@@ -89,7 +137,7 @@ def Desert(background):
     bgobj = pygame.transform.scale(pygame.image.load("assets/desert.png"), (800, 600))
     background = bgobj
     character = pygame.image.load("assets/character.png")
-        # load the character's sprite at 0,0
+    # load the character's sprite at 0,0
     character_x = 0
     character_y = 0
     # create the character sprite
@@ -158,6 +206,7 @@ def die(text, background):
     # update screen
     pygame.display.update()
 
+
 def randsoundgen(sounds):
     # use randint (2% chance of triggering)
     if random.randint(1, 1000) == 1:
@@ -165,7 +214,6 @@ def randsoundgen(sounds):
         if pygame.mixer.get_busy() is False:
             soundObj = pygame.mixer.Sound("assets/" + random.choice(sounds))
             soundObj.play()
-
 
 
 clock.tick(30)
@@ -193,6 +241,7 @@ while True:
 
             # if the player presses W, move the character up
         if pressed[pygame.K_w]:
+            FrozenTundra(background)
             if find_hex(character_x, character_y - 5, blacklisted_colors):
                 # remove character from previous position
                 screen.blit(
@@ -206,9 +255,7 @@ while True:
                     ),
                 )
                 # change character sprite
-                character_sprite.image = pygame.image.load(
-                    "assets/character_back.png"
-                )
+                character_sprite.image = pygame.image.load("assets/character_back.png")
                 background = bgobj
                 character_y -= 5
                 character_sprite.rect.y = character_y
@@ -260,9 +307,7 @@ while True:
                     ),
                 )
                 # change character sprite
-                character_sprite.image = pygame.image.load(
-                    "assets/character_left.png"
-                )
+                character_sprite.image = pygame.image.load("assets/character_left.png")
                 character_x -= 5
                 character_sprite.rect.x = character_x
                 screen.blit(
@@ -287,9 +332,7 @@ while True:
                     ),
                 )
                 # change character sprite
-                character_sprite.image = pygame.image.load(
-                    "assets/character_right.png"
-                )
+                character_sprite.image = pygame.image.load("assets/character_right.png")
                 character_x += 5
                 character_sprite.rect.x = character_x
                 screen.blit(

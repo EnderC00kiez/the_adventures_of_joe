@@ -1,0 +1,66 @@
+{
+    "plains": {
+        "name": "Arborius",
+        "type": "Apple Tree",
+        "location": "Will pop out of bush when you touch the right bush",
+        "extra-info": "when beaten, you get a flyer with a phone number to call poison control - 1-800-9909-0989 AND a ban hammer",
+        "powers": [
+            "can summon apple storm",
+            "can summon tiny ghost spirits",
+            "pops up poisonous tree trunks in random places across the map"
+        ],
+        "weaknesses": [
+            "fire",
+            "smoke"
+        ]
+    },
+    "desert": {
+        "name": "Sceletrion",
+        "type": "Robot Skeleton",
+        "location": "inside house in desert",
+        "extra-info": "when beaten, you get a mp3 player, AND a telephone",
+        "powers": [
+            "robotic arm",
+            "can send out drones",
+            "can summon lightning"
+        ],
+        "weaknesses": [
+            "water",
+            "light"
+        ]
+    },
+    "swamp": {
+        "name": "Fungron",
+        "type": "Poisonous Mushroom",
+        "location": "on single huge tree in swamp",
+        "extra-info": "when beaten, you get an sd card that contains an mp3 file to play distorted trance music for racing game",
+        "powers": [
+            "shoots poison",
+            "smashes you with arm that it occasionally can grow",
+            "jumps on you"
+        ],
+        "weaknesses": [
+            "weed killer",
+            "poison control"
+        ]
+    },
+    "snowy_tundra": {
+        "name": "Dream",
+        "type": "Cheating Minecraft Player with 25M Subs",
+        "location": "under rock, you have to find right one",
+        "extra-info": "when beaten, you get a portal summoner that brings you to the mama dimension",
+        "powers": [
+            "hooks you with fishing rod",
+            "throws ender pearls at you to teleport you closer to him",
+            "throws blaze rods to set you on fire",
+            "has 4 notch apples",
+            "/give netherite_sword",
+            "/give tnt",
+            "/give flint_steel"
+        ],
+        "weaknesses": [
+            "ban hammer",
+            "distorted trance music for racing game"
+        ]
+    }
+}
