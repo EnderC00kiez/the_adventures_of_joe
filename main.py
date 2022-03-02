@@ -1,11 +1,14 @@
 # create graphics window
 # import pygame
+from email.errors import InvalidMultipartContentTransferEncodingDefect
 import pygame
 from pygame.locals import *
 from sys import exit
 import time
 import random
 import savelib
+
+current_charimg_rot = "default"
 
 try:
     import pyi_splash
@@ -16,8 +19,8 @@ except ImportError:
     pass
 
 blacklisted_colors = ["#121212", "#054d05", "#64b5f6"]
-#sounds = ["Bridge.mp3"]
-sounds = ["snowy_tundra_boss.mp3"]
+# sounds = ["Bridge.mp3"]
+sounds = ["Bridge.mp3", "plains.wav"]
 bgname = "plains"
 
 
@@ -116,47 +119,14 @@ def find_hex(x, y, cannot_step_on):
         pass
 
 
-def FrozenTundra(background):
-    bgname = "frozen_tundra"
-    blacklisted_colors = ["#9e9e9e", "#90caf9", "#212121"]
+# create custom background class
+class Background(pygame.sprite.Sprite):
+    def __init__(self, image_file, location):
+        pygame.sprite.Sprite.__init__(self)  # call Sprite initializer
+        self.image = pygame.image.load(image_file)
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = location
 
-def Swamp(background):
-    bgname = "swamp"
-    sounds = ["Muddy Water.mp3"]
-    background = bgname
-
-
-def Desert(background):
-    bgname = "desert"
-    sounds = ["Saguaro.mp3"]
-    # remove character
-    screen.blit(background, (0, 0))
-    # clear old background
-    background.fill((0, 0, 0, 0))
-    # set background to desert.png
-    bgobj = pygame.transform.scale(pygame.image.load("assets/desert.png"), (800, 600))
-    background = bgobj
-    character = pygame.image.load("assets/character.png")
-    # load the character's sprite at 0,0
-    character_x = 0
-    character_y = 0
-    # create the character sprite
-    character_sprite = pygame.sprite.Sprite()
-    character_sprite.image = character
-    character_sprite.rect = character_sprite.image.get_rect()
-    character_sprite.rect.x = character_x
-    character_sprite.rect.y = character_y
-    # draw background
-    screen.blit(background, (0, 0))
-    # draw character
-    screen.blit(
-        character_sprite.image, (character_sprite.rect.x, character_sprite.rect.y)
-    )
-    # update screen
-    pygame.display.update()
-    # create a character
-    character = pygame.image.load("assets/character.png")
-    # create a background
 
 
 def draw_text(text, font, surface, x, y):
@@ -165,6 +135,73 @@ def draw_text(text, font, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
     pygame.display.update()
+
+
+# create a function to move the player, supporting custom backgrounds
+def move_player(background, x, y, direction):
+    global current_charimg_rot
+    if direction == "up":
+        if find_hex(x, y - 5, blacklisted_colors):
+            if not current_charimg_rot == "up":
+                # change image to character.png
+                character = pygame.image.load("assets/character_back.png")
+                # set character image
+                character_sprite.image = character
+                current_charimg_rot = "up"
+            character_sprite.rect.y -= 5
+            screen.blit(background, (0, 0))
+            screen.blit(
+                character_sprite.image,
+                (character_sprite.rect.x, character_sprite.rect.y),
+            )
+            pygame.display.update()
+    elif direction == "down":
+        if find_hex(x, y + 5, blacklisted_colors):
+            if not current_charimg_rot == "default":
+                # change image to character.png
+                character = pygame.image.load("assets/character.png")
+                # set character image
+                character_sprite.image = character
+                current_charimg_rot = "default"
+            character_sprite.rect.y += 5
+            screen.blit(background, (0, 0))
+            screen.blit(
+                character_sprite.image,
+                (character_sprite.rect.x, character_sprite.rect.y),
+            )
+            pygame.display.update()
+    elif direction == "left":
+        if find_hex(x - 5, y, blacklisted_colors):
+            if not current_charimg_rot == "left":
+                # change image to character.png
+                character = pygame.image.load("assets/character_left.png")
+                # set character image
+                character_sprite.image = character
+                current_charimg_rot = "left"
+            character_sprite.rect.x -= 5
+            screen.blit(background, (0, 0))
+            screen.blit(
+                character_sprite.image,
+                (character_sprite.rect.x, character_sprite.rect.y),
+            )
+            pygame.display.update()
+    elif direction == "right":
+        if find_hex(x + 5, y, blacklisted_colors):
+            if not current_charimg_rot == "right":
+                # change image to character.png
+                character = pygame.image.load("assets/character_right.png")
+                # set character image
+                character_sprite.image = character
+                current_charimg_rot = "right"
+            character_sprite.rect.x += 5
+            screen.blit(background, (0, 0))
+            screen.blit(
+                character_sprite.image,
+                (character_sprite.rect.x, character_sprite.rect.y),
+            )
+            pygame.display.update()
+    else:
+        raise InvalidMultipartContentTransferEncodingDefect("Invalid direction")
 
 
 def die(text, background):
@@ -209,7 +246,7 @@ def die(text, background):
 
 def randsoundgen(sounds):
     # use randint (2% chance of triggering)
-    if random.randint(1, 1000) == 1:
+    if random.randint(1, 10000) == 1:
         # use random.choice to pick a sound
         if pygame.mixer.get_busy() is False:
             soundObj = pygame.mixer.Sound("assets/" + random.choice(sounds))
@@ -241,106 +278,24 @@ while True:
 
             # if the player presses W, move the character up
         if pressed[pygame.K_w]:
-            FrozenTundra(background)
-            if find_hex(character_x, character_y - 5, blacklisted_colors):
-                # remove character from previous position
-                screen.blit(
-                    background,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                    (
-                        character_sprite.rect.x,
-                        character_sprite.rect.y,
-                        character_sprite.rect.width,
-                        character_sprite.rect.height,
-                    ),
-                )
-                # change character sprite
-                character_sprite.image = pygame.image.load("assets/character_back.png")
-                background = bgobj
-                character_y -= 5
-                character_sprite.rect.y = character_y
-                screen.blit(
-                    character_sprite.image,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                )
-                # update the screen
-                pygame.display.update()
+            move_player(
+                background, character_sprite.rect.x, character_sprite.rect.y, "up"
+            )
             # if the player presses S, move the character down
         elif pressed[pygame.K_s]:
-            if find_hex(character_x, character_y + 5, blacklisted_colors):
-                # remove character from previous position
-                background = bgobj
-                screen.blit(
-                    background,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                    (
-                        character_sprite.rect.x,
-                        character_sprite.rect.y,
-                        character_sprite.rect.width,
-                        character_sprite.rect.height,
-                    ),
-                )
-                screen.blit(background, (0, 0))
-                # change character sprite
-                character_sprite.image = pygame.image.load("assets/character.png")
-                character_y += 5
-                character_sprite.rect.y = character_y
-                screen.blit(
-                    character_sprite.image,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                )
-                # update the screen
-                pygame.display.update()
+            move_player(
+                background, character_sprite.rect.x, character_sprite.rect.y, "down"
+            )
             # if the player presses A, move the character left
         elif pressed[pygame.K_a]:
-            if find_hex(character_x - 5, character_y, blacklisted_colors):
-                # remove character from previous position
-                background = bgobj
-                screen.blit(
-                    background,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                    (
-                        character_sprite.rect.x,
-                        character_sprite.rect.y,
-                        character_sprite.rect.width,
-                        character_sprite.rect.height,
-                    ),
-                )
-                # change character sprite
-                character_sprite.image = pygame.image.load("assets/character_left.png")
-                character_x -= 5
-                character_sprite.rect.x = character_x
-                screen.blit(
-                    character_sprite.image,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                )
-                # update the screen
-                pygame.display.update()
+            move_player(
+                background, character_sprite.rect.x, character_sprite.rect.y, "left"
+            )
             # if the player presses D, move the character right
         elif pressed[pygame.K_d]:
-            if find_hex(character_x + 5, character_y, blacklisted_colors):
-                # remove character from previous position
-                background = bgobj
-                screen.blit(
-                    background,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                    (
-                        character_sprite.rect.x,
-                        character_sprite.rect.y,
-                        character_sprite.rect.width,
-                        character_sprite.rect.height,
-                    ),
-                )
-                # change character sprite
-                character_sprite.image = pygame.image.load("assets/character_right.png")
-                character_x += 5
-                character_sprite.rect.x = character_x
-                screen.blit(
-                    character_sprite.image,
-                    (character_sprite.rect.x, character_sprite.rect.y),
-                )
-                # update the screen
-                pygame.display.update()
+            move_player(
+                background, character_sprite.rect.x, character_sprite.rect.y, "right"
+            )
             """
             if event.key == K_F4:
                 die("MANUALLY_TRIGGERED", background)
