@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "the-adventures-of-joe"
+version = "0.1.0"
+description = ""
+authors = ["EnderC00kiez <49785023+EnderC00kiez@users.noreply.github.com>"]
+license = "GPL"
+readme = "README.md"
+packages = [{include = "the_adventures_of_joe"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pygame = "2.1.2"
+
+[tool.poetry.group.dev.dependencies]
+pyperf = "^2.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

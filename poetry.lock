@@ -1,0 +1,18 @@
+[[package]]
+name = "pyperf"
+version = "2.3.1"
+description = "Python module to run and analyze benchmarks"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.10"
+content-hash = "3fa51cbe2adc62395866451d3c3b3d3333cf11ca5225b70cab13044016366cfc"
+
+[metadata.files]
+pyperf = [
+    {file = "pyperf-2.3.1-py2.py3-none-any.whl", hash = "sha256:d4063342373b18fcfa4d28b8f9fd1443012eb8db04b5cb06c1936c0489e2456e"},
+    {file = "pyperf-2.3.1.tar.gz", hash = "sha256:4ac2e2cf724ab9b525227c3b4a69f16ab5c714ea5bad61c974e0c5d5787238a1"},
+]
